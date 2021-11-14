@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>index</title>
+</head>
+
+<body>
+    <form>
+        <h1>Formulario de base de datos de mesas:</h1>
+        <input type="text" name="nombre" placeholder="Nombre de la mesa">
+        <input type="text" name="tamanyo" placeholder="Tamaño de la mesa" />
+        <input type="text" name="color" placeholder="Color de la mesa" />
+        <input type="text" name="material" placeholder="Material de la mesa" />
+        <input type="number" name="patas" placeholder="Número de patas" />
+        <button class="add">Añadir mesa</button>
+        <button class="edit">Modificar mesa</button>
+        <button class="remove">Eliminar mesa</button>
+        <br><br><a href="/api/mesas">Ver lista de mesas disponibles:</a>
+        <!--<button class="edit">Edit</button>
+        <button class="delete">Delete</button>-->
+    </form>
+    <script>
+        //2. Método POST y ruta ‘/api/anyadir’. Añadiremos una nueva mesa a la base de datos.
+
+        //Seleccionamos el botón .add del formulario:
+        document.querySelector(".add").addEventListener("click", function (event) {
+            event.preventDefault();
+            let nombre = document.querySelector("input[name='nombre']").value;
+            let tamanyo = document.querySelector("input[name='tamanyo']").value;
+            let color = document.querySelector("input[name='color']").value;
+            let material = document.querySelector("input[name='material']").value;
+            let patas = document.querySelector("input[name='patas']").value;
+            let mesa02 = {
+                nombre: nombre,
+                tamanyo: tamanyo,
+                color: color,
+                material: material,
+                patas: patas,
+            };
+            let body = /*BORIS*/JSON.stringify(mesa02);
+
+            //Usamos un fetch en la ruta especificada para enviar la información:
+            fetch('/api/anyadir', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: body
+            }).then(function (response) {
+                return response.json()
+            }).then(function (res) {
+                console.log(res)
+            });
+            //Llamamos a la función f5 para refresque la página:
+            f5();
+        })
+        //3. Método PUT y ruta ‘/api/modificar/:color’. Todas las mesas del color indicado en la
+        // ruta cambiarán su color a granate.
+
+        //Seleccionamos el botón .edit del formulario:
+        document.querySelector(".edit").addEventListener("click", function (event) {
+            event.preventDefault();
+            let color = document.querySelector("input[name='color']").value;
+
+            fetch('/api/modificar/' + color, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            }).then(function (response) {
+                return response.json()
+            }).then(function (res) {
+                console.log(res)
+            });
+            f5();
+        })
+        function f5() {
+            location.reload();
+        }
+    </script>
+</body>
+
+</html>
